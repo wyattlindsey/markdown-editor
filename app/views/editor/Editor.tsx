@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Markdown from 'react-markdown';
 import styled, { css } from 'styled-components';
 
 export const Editor: React.FC = () => {
+    const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
+
+    const [text, setText] = useState('');
+
+    useEffect(() => {
+        textAreaRef.current?.focus();
+    }, []);
+
+    const handleKeyUp = () => {
+        setText(textAreaRef.current?.value ?? '');
+    };
+
     return (
         <Outer>
             <Toolbar>
@@ -9,10 +22,10 @@ export const Editor: React.FC = () => {
                 <button>Load</button>
             </Toolbar>
             <Panes>
-                <RawMarkdown>
-                    <textarea value={''}></textarea>
-                </RawMarkdown>
-                <RenderedHtml></RenderedHtml>
+                <RawMarkdown onKeyUp={handleKeyUp} ref={textAreaRef} />
+                <RenderedHtml>
+                    <Markdown>{text}</Markdown>
+                </RenderedHtml>
             </Panes>
         </Outer>
     );
