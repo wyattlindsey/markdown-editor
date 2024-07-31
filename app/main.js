@@ -1,19 +1,41 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
+import * as path from 'path';
 
-function createWindow() {
+const __dirname = path.resolve();
+
+const createWindow = () => {
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            contextIsolation: true,
-            enableRemoteModule: false,
+            contextIsolation: false,
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'preload.cjs'),
         },
     });
 
     mainWindow.loadURL('http://localhost:9000');
-}
+};
 
-app.on('ready', createWindow);
+export const getFileFromUser = () => {
+    const files = dialog.showOpenDialogSync({
+        properties: ['openFile'],
+        filters: [
+            { name: 'Markdown Files', extensions: ['md'] },
+            { name: 'Text Files', extensions: ['txt'] },
+        ],
+    });
+
+    if (!files) return;
+
+    const file = files[0];
+    console.log(file);
+};
+
+app.on('ready', () => {
+    ipcMain.on('open-file-dialog', getFileFromUser);
+    createWindow();
+});
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {

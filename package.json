@@ -11,6 +11,7 @@
         "dev": "concurrently \"yarn start\" \"wait-on http://localhost:9000 && yarn electron\""
     },
     "dependencies": {
+        "@electron/remote": "electron/remote",
         "electron": "^31.2.1",
         "path-browserify": "^1.0.1",
         "react": "^18.3.1",

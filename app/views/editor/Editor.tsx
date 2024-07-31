@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
 import styled, { css } from 'styled-components';
+import { Button } from '../../components/Button';
 
 export const Editor: React.FC = () => {
     const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
@@ -15,11 +16,16 @@ export const Editor: React.FC = () => {
         setText(textAreaRef.current?.value ?? '');
     };
 
+    const handleLoadClick = () => {
+        debugger;
+        window.electronAPI.openFileDialog();
+    };
+
     return (
         <Outer>
             <Toolbar>
-                <button>Save</button>
-                <button>Load</button>
+                <StyledButton onClick={handleLoadClick}>Load</StyledButton>
+                <StyledButton>Save</StyledButton>
             </Toolbar>
             <Panes>
                 <RawMarkdown onKeyUp={handleKeyUp} ref={textAreaRef} />
@@ -40,9 +46,14 @@ const Outer = styled.div`
 
 const Toolbar = styled.div`
     display: flex;
+    justify-content: space-between;
     background-color: darkgray;
     color: white;
     padding: 16px;
+`;
+
+const StyledButton = styled(Button)`
+    margin-right: 16px;
 `;
 
 const Panes = styled.div`

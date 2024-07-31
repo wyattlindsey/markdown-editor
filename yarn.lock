@@ -1073,6 +1073,10 @@
     minimist "^1.2.6"
     plist "^3.0.5"
 
+"@electron/remote@electron/remote":
+  version "0.0.0-development"
+  resolved "https://codeload.github.com/electron/remote/tar.gz/5d7d09a22e99ea3f8c6e0085804f38c8ed69a919"
+
 "@electron/universal@1.5.1":
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/@electron/universal/-/universal-1.5.1.tgz#f338bc5bcefef88573cf0ab1d5920fac10d06ee5"

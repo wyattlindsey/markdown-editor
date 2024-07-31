@@ -5,7 +5,7 @@ module.exports = {
     mode: 'development',
     entry: {
         main: './app/main.js',
-        preload: './preload.js',
+        preload: './preload.cjs',
         app: './app/index.tsx',
     },
     output: {
