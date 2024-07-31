@@ -1,3 +1,5 @@
+import { IpcRenderer } from 'electron';
+
 export interface IElectronAPI {
     openFileDialog: () => void;
 }
@@ -5,5 +7,8 @@ export interface IElectronAPI {
 declare global {
     interface Window {
         electronAPI: IElectronAPI;
+        ipcRenderer: IpcRenderer;
     }
 }
+
+export const { ipcRenderer } = window;

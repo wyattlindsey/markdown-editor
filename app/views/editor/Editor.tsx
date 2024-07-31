@@ -12,13 +12,18 @@ export const Editor: React.FC = () => {
         textAreaRef.current?.focus();
     }, []);
 
-    const handleKeyUp = () => {
+    useEffect(() => {
+        window.ipcRenderer.on('file-opened', (_, text) => {
+            setText(text);
+        });
+    }, []);
+
+    const handleChange = () => {
         setText(textAreaRef.current?.value ?? '');
     };
 
     const handleLoadClick = () => {
-        debugger;
-        window.electronAPI.openFileDialog();
+        window.electronAPI?.openFileDialog();
     };
 
     return (
@@ -28,7 +33,11 @@ export const Editor: React.FC = () => {
                 <StyledButton>Save</StyledButton>
             </Toolbar>
             <Panes>
-                <RawMarkdown onKeyUp={handleKeyUp} ref={textAreaRef} />
+                <RawMarkdown
+                    onChange={handleChange}
+                    ref={textAreaRef}
+                    value={text}
+                />
                 <RenderedHtml>
                     <Markdown>{text}</Markdown>
                 </RenderedHtml>

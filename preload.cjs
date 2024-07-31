@@ -1,11 +1,18 @@
-const ipcRenderer = window.require('electron').ipcRenderer;
-const contextBridge = window.require('electron').contextBridge;
+const ipcRenderer = require('electron').ipcRenderer;
+const contextBridge = require('electron').contextBridge;
+window.ipcRenderer = require('electron').ipcRenderer;
 
-console.log('preload:::');
-
-// Expose a safe API to the renderer process
 contextBridge.exposeInMainWorld('electronAPI', {
     openFileDialog: () => {
         ipcRenderer.send('open-file-dialog');
+    },
+});
+
+contextBridge.exposeInMainWorld('ipcRenderer', {
+    on: (channel, listener) => {
+        ipcRenderer.on(channel, listener);
+    },
+    send: (channel, data) => {
+        ipcRenderer.send(channel, data);
     },
 });

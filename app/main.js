@@ -1,14 +1,16 @@
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import * as path from 'path';
+import * as fs from 'fs';
 
 const __dirname = path.resolve();
+let mainWindow;
 
 const createWindow = () => {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-            contextIsolation: false,
+            contextIsolation: true,
             nodeIntegration: true,
             preload: path.join(__dirname, 'preload.cjs'),
         },
@@ -21,15 +23,15 @@ export const getFileFromUser = () => {
     const files = dialog.showOpenDialogSync({
         properties: ['openFile'],
         filters: [
-            { name: 'Markdown Files', extensions: ['md'] },
             { name: 'Text Files', extensions: ['txt'] },
+            { name: 'Markdown Files', extensions: ['md'] },
         ],
     });
 
     if (!files) return;
 
-    const file = files[0];
-    console.log(file);
+    const file = fs.readFileSync(files[0], 'utf-8').toString();
+    mainWindow.webContents.send('file-opened', file);
 };
 
 app.on('ready', () => {
